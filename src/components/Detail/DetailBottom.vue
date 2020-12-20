@@ -43,7 +43,6 @@ export default {
       let ids = this.playlist.map((item) => {
         return item.id;
       });
-      console.log(ids);
       this.setSongDetail(ids);
     },
   },

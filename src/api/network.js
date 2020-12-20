@@ -32,4 +32,16 @@ export default {
                 })
         })
     },
+    all: function (list) {
+        return new Promise(function (resolve, reject) {
+          axios.all(list)
+            .then(axios.spread(function (...result) {
+              // 两个请求现在都执行完成
+              resolve(result)
+            }))
+            .catch(function (err) {
+              reject(err)
+            })
+        })
+      }
 }

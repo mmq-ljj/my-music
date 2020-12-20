@@ -25,7 +25,11 @@
       <div class="play" @click="play" ref="play"></div>
       <!-- 下一首按钮 -->
       <div class="next" @click="next"></div>
-      <div class="favorite" @click="favorite" :class="{active:isFavorite(currentSong)}"></div>
+      <div
+        class="favorite"
+        @click="favorite"
+        :class="{ active: isFavorite(currentSong) }"
+      ></div>
     </div>
   </div>
 </template>
@@ -33,6 +37,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import modeType from "../../store/modeType";
+import { formartTime } from "../../tools/tools";
 export default {
   // 方法
   methods: {
@@ -79,28 +84,6 @@ export default {
       return result !== undefined;
     },
     // 格式化时间的方法
-    formartTime(time) {
-      // 2.得到两个时间之间的差值(秒)
-      let differSecond = time;
-      // 3.利用相差的总秒数 / 每一天的秒数 = 相差的天数
-      let day = Math.floor(differSecond / (60 * 60 * 24));
-      day = day >= 10 ? day : "0" + day;
-      // 4.利用相差的总秒数 / 小时 % 24;
-      let hour = Math.floor((differSecond / (60 * 60)) % 24);
-      hour = hour >= 10 ? hour : "0" + hour;
-      // 5.利用相差的总秒数 / 分钟 % 60;
-      let minute = Math.floor((differSecond / 60) % 60);
-      minute = minute >= 10 ? minute : "0" + minute;
-      // 6.利用相差的总秒数 % 秒数
-      let second = Math.floor(differSecond % 60);
-      second = second >= 10 ? second : "0" + second;
-      return {
-        day: day,
-        hour: hour,
-        minute: minute,
-        second: second,
-      };
-    },
     // 点击改变滚动条位置的方法
     progressClick(e) {
       // 1.计算进度条的位置
@@ -153,13 +136,13 @@ export default {
     },
     // 监听当前歌曲的 总时长
     totalTime(newValue, oldValue) {
-      let time = this.formartTime(newValue);
+      let time = formartTime(newValue);
       this.$refs.eleTotalTime.innerHTML = time.minute + ":" + time.second;
     },
     // 监听当前歌曲播放时长
     currentTime(newValue, oldValue) {
       // 1.格式化当前播放的时间
-      let time = this.formartTime(newValue);
+      let time = formartTime(newValue);
       this.$refs.eleCurrentTime.innerHTML = time.minute + ":" + time.second;
       // 2.根据当前播放的时间计算比例 (当前的播放时间 / 歌曲播放总时长 = 百分比)
       // 实现进度条的加载 (进度条的小圆点 绝对定位于 进度条前景 通过改变进度条前景的宽度 实时改变小圆点的位置)

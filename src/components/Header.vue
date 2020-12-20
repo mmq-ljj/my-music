@@ -2,7 +2,7 @@
   <div class="header" @click="changeTheme">
     <div class="header-left"></div>
     <p class="header-title">喵喵音乐</p>
-    <div class="header-right"></div>
+    <div class="header-right" @click.stop="accountClick"></div>
   </div>
 </template>
 <script>
@@ -25,6 +25,10 @@ export default {
         "data-theme",
         this.themes[this.index]
       );
+    },
+    // 点开展开个人中心的方法
+    accountClick() {
+      this.$router.push("/account");
     },
   },
 };

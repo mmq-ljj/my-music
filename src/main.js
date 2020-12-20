@@ -6,12 +6,10 @@ import fastclick from 'fastclick'
 import './assets/css/base.scss'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+// import VConsole from 'vconsole'
 
-// 全局引入swiper
-// import VueAwesomeSwiper from 'vue-awesome-swiper'
-// import 'swiper/swiper-bundle.css'
-// Vue.use(VueAwesomeSwiper, /* { default options with global component } */)
-
+// const vconsole = new VConsole();
+// Vue.use(vconsole)
 // 图片懒加载
 import VueLazyload from 'vue-lazyload'
 Vue.use(VueLazyload, {

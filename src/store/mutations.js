@@ -86,7 +86,7 @@ export default {
     // 添加歌曲到喜欢列表里
     [SET_FAVORITE_SONG](state, song) {
         let result = state.favoriteList.find((currentValue) => {
-            return currentValue === song
+            return currentValue.id === song.id
         })
         if (result === undefined) {
             state.favoriteList.push(song)
@@ -99,7 +99,7 @@ export default {
     // 播放历史的歌曲
     [SET_HISTORY_SONG](state, song) {
         let result = state.historyList.find((currentValue) => {
-            return currentValue === song
+            return currentValue.id === song.id
         })
         // 如果没有这首歌
         if (result === undefined) {

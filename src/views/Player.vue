@@ -22,6 +22,11 @@ import MiniPlayer from "../components/Player/MiniPlayer";
 import ListPlayer from "../components/Player/ListPlayer";
 import { mapGetters, mapActions } from "vuex";
 import mode from "../store/modeType";
+import {
+  getRandomIntInclusive,
+  setLocalStorage,
+  getLocalStorage,
+} from "../tools/tools";
 export default {
   components: {
     NormalPlayer,
@@ -52,8 +57,13 @@ export default {
     },
     // 监听当前播放歌曲索引的变化
     currentIndex() {
+      // 问题:在ios系统中不会自动加载歌曲，所以oncanplay永远都不会执行
+      //      在pc端和Android端，系统会自动加载歌曲，所以 oncanplay会自动执行
+      // 解决方案：如何监听ios 中Audio的歌曲是否已经准备好了，通过ondurationchange事件来监听
+      // ondurationchange事件什么时候执行，当歌曲加载完成之后执行，因为只有当歌曲加载完成之后才能获取到歌曲的总时长
       // 给audio注册一个 canplay 的事件
       this.$refs.audio.oncanplay = () => {
+        // console.log("2");
         // 更新当前播放歌曲总时长
         this.totalTime = this.$refs.audio.duration;
         // this.isPlaying 为真说明需要播放
@@ -73,31 +83,37 @@ export default {
     // 监听 喜欢列表里的变化
     favoriteList(newValue, oldValue) {
       // setItem 里的值 只能存储字符串
-      window.localStorage.setItem("favoriteList", JSON.stringify(newValue));
+      // window.localStorage.setItem("favoriteList", JSON.stringify(newValue));
+      setLocalStorage("favoriteList", newValue);
     },
     // 监听 历史播放记录列表的变化
     historyList(newValue, oldValue) {
-      window.localStorage.setItem("historyList", JSON.stringify(newValue));
+      // window.localStorage.setItem("historyList", JSON.stringify(newValue));
+      setLocalStorage("historyList", newValue);
     },
   },
   // 在下一次打开网页的时候 获取喜欢列表 但获取到的是字符串
   created() {
     // 先拿到locaStorage里的喜欢列表 并且转换为数组形式
-    let favoriteList = JSON.parse(window.localStorage.getItem("favoriteList"));
+    // let favoriteList = JSON.parse(window.localStorage.getItem("favoriteList"));
+    let favoriteList = getLocalStorage("favoriteList");
     if (favoriteList === null) {
       return;
     }
     // 在created生命周期里 调用setFavoriteList方法 再通过commit去调用mutations里的方法修改state里的喜欢列表
     this.setFavoriteList(favoriteList);
     // 2.在生命周期 调用sethistoryList的方法 给历史播放列表添加歌曲
-    let historyList = JSON.parse(window.localStorage.getItem("historyList"));
+    // let historyList = JSON.parse(window.localStorage.getItem("historyList"));
+    let historyList = getLocalStorage("historyList");
     if (historyList === null) {
       return;
     }
     this.setHistoryList(historyList);
   },
   mounted() {
-    this.$refs.audio.oncanplay = () => {
+    // this.$refs.audio.oncanplay
+    this.$refs.audio.ondurationchange = () => {
+      // console.log("1");
       this.totalTime = this.$refs.audio.duration; // 拿到当前歌曲的总时长(秒)
     };
   },
@@ -131,16 +147,11 @@ export default {
       } else if (this.modeType === mode.random) {
         // 1.拿到歌曲播放列表有几首歌曲
         // 2.生成一个歌曲索引范围内 随机索引
-        let index = this.getRandomIntInclusive(0, this.songs.length - 1);
+        let index = getRandomIntInclusive(0, this.songs.length - 1);
         this.setCurrentIndex(index);
       }
     },
     // 生成随机数
-    getRandomIntInclusive(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min + 1)) + min; //含最大值，最小值
-    },
   },
 };
 </script>

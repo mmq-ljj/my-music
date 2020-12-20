@@ -83,12 +83,29 @@ export default {
       this.albums = res.albums.splice(0, 6);
       // console.log(this.albums);
     },
-    // 获取推荐新音乐
+    // 获取推荐新音乐歌曲
     async getNewSong() {
       const { data: res } = await this.$http.get("/personalized/newsong");
-      // console.log(res);
       this.songs = res.result;
-      // console.log(this.songs);
+      // console.log(res.result);
+      let list = [];
+      res.result.forEach((value) => {
+        let obj = {};
+        obj.id = value.id;
+        obj.name = value.name;
+        obj.picUrl = value.song.album.picUrl;
+        let singer = "";
+        for (let i = 0; i < value.song["artists"].length; i++) {
+          if (i === 0) {
+            singer = value.song["artists"][i].name;
+          } else {
+            singer += "-" + value.song["artists"][i].name;
+          }
+        }
+        obj.singer = singer;
+        list.push(obj);
+      });
+      this.songs = list;
     },
     // 点击跳往推荐歌单和最新专辑详情页
     fatherSelectItem(id, type) {
