@@ -22,6 +22,7 @@ import DetailHeader from "../components/Detail/DetailHeader";
 import DetailTop from "../components/Detail/DetailTop";
 import DetailBottom from "../components/Detail/DetailBottom";
 import ScrollView from "../components/ScrollView";
+// import {getArtistsSongs,getTopList} from '../api/index'
 export default {
   name: "Detail",
   components: {
@@ -43,22 +44,53 @@ export default {
       this.getPlayList();
     } else if (this.$route.params.type === "album") {
       this.getPlayListAlbum();
+    } else if (this.$route.params.type === "singer") {
+      this.getArtistsSongs();
+    } else if (this.$route.params.type === "rank") {
+      this.getTopList();
+      //  this.getPlayList();
     }
   },
   methods: {
     // 歌单详情页 发送ajax请求拿到数据
     async getPlayList() {
-      const { data: res } = await this.$http.get(`playlist/detail?id=${this.$route.params.id}`);
+      const { data: res } = await this.$http.get(
+        `playlist/detail?id=${this.$route.params.id}`
+      );
       this.playlist = res.playlist;
     },
     // 最新专辑 发送ajax请求拿到数据
     async getPlayListAlbum() {
-      const { data: res } = await this.$http.get(`/album?id=${this.$route.params.id}`);
-      console.log(res);
+      const { data: res } = await this.$http.get(
+        `/album?id=${this.$route.params.id}`
+      );
+      // console.log(res);
       this.playlist = {
         name: res.album.name,
         coverImgUrl: res.album.picUrl,
         tracks: res.songs,
+      };
+    },
+    // 获取歌手歌单
+    async getArtistsSongs() {
+      const { data: res } = await this.$http.get(
+        `/artists?id=${this.$route.params.id}`
+      );
+      this.playlist = {
+        name: res.artist.name,
+        coverImgUrl: res.artist.picUrl,
+        tracks: res.hotSongs,
+      };
+    },
+    // 获取排行榜歌单
+    async getTopList() {
+      const { data: res } = await this.$http.get(
+        `top/list?id=${this.$route.params.id}`
+      );
+      this.playlist = {
+        name: res.playlist.name,
+        coverImgUrl: res.playlist.creator.backgroundUrl,
+        tracks: res.playlist.tracks,
       };
     },
   },

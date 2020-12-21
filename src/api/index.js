@@ -70,6 +70,78 @@ export const getAllArtists = (letter) => {
     })
 
 }
+// 获取歌手单曲
+export const getArtistsSongs = (data) => Network.get('/artists', data)
+// 获取榜单
+export const getTopListDetail = () => {
+    return new Promise(function (resolve, reject) {
+        let category = {
+            officialList: [
+                { name: '云音乐飙升榜', id: 3 },
+                { name: '云音乐新歌榜', id: 0 },
+                { name: '网易原创歌曲榜', id: 2 },
+                { name: '云音乐热歌榜', id: 1 }
+            ],
+            recList: [
+                { name: '云音乐说唱榜', id: 23 },
+                { name: '云音乐电音榜', id: 25 },
+                { name: '云音乐欧美新歌榜', id: 32 },
+                { name: '抖音排行榜', id: 26 },
+                { name: '云音乐ACG音乐榜', id: 22 },
+                { name: '云音乐古典音乐榜', id: 24 }
+            ],
+            globalList: [
+                { name: '美国Billboard周榜', id: 6 },
+                { name: 'UK排行榜周榜', id: 5 },
+                { name: 'Beatport全球电子舞曲榜', id: 21 },
+                { name: '日本Oricon周榜', id: 10 },
+                { name: 'iTunes榜', id: 8 },
+                { name: '英国Q杂志中文版周榜', id: 29 }
+            ],
+            otherList: [
+                { name: 'KTV唛榜', id: 7 },
+                { name: '法国 NRJ Vos Hits 周榜', id: 19 },
+                { name: '新声榜', id: 27 },
+                { name: '云音乐韩语榜', id: 28 },
+                { name: '电竞音乐榜', id: 30 },
+                { name: '云音乐欧美热歌榜', id: 31 }
+            ],
+            // titles: { officialList: '官方榜', recList: '推荐榜', globalList: '全球榜', otherList: '更多榜单' }
+            titles: { officialList: '官方榜', recList: '推荐榜' }
+        }
+        Network.get('toplist/detail')
+            .then(function (data) {
+                // console.log(data);
+                data.list.forEach(function (obj) {
+                    let flag = false
+                    for (let key in category) {
+                        for (let i = 0; i < category[key].length; i++) {
+                            if (category[key][i].name === obj.name) {
+                                category[key][i].rank = obj
+                                flag = true
+                                break
+                            }
+                        }
+                        if (flag) {
+                            break
+                        }
+                    }
+                })
+                // console.log(category);
+                resolve(category)
+            })
+            .catch(function (err) {
+                reject(err)
+            })
+    })
+}
+// 获取榜单歌曲
+export const getTopList = (data) => Network.get('toplist/detail', data)
+// 输入框搜索 返回内容
+export const getSearchList = (data) => Network.get('search?type=1', data)
+// 热搜列表
+export const getSearchHot = () => Network.get('search/hot', ) 
+
 
 
 

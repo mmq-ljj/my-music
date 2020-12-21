@@ -14,7 +14,12 @@
           <h2 class="group-title">{{ keys[index] }}</h2>
           <!-- 第二个ul li 是渲染出标题 热 a-z 对应的歌手-->
           <ul>
-            <li class="group-item" v-for="obj in list[index]" :key="obj.id">
+            <li
+              class="group-item"
+              v-for="obj in list[index]"
+              :key="obj.id"
+              @click.stop="switchSinger(obj.id)"
+            >
               <img v-lazy="obj.img1v1Url" alt="" />
               <p>{{ obj.name }}</p>
             </li>
@@ -22,6 +27,7 @@
         </li>
       </ul>
     </ScrollView>
+    <!-- 右边 热门 a-z 的侧边栏 -->
     <ul class="list-keys">
       <!-- <li
         v-for="(key, index) in keys"
@@ -42,6 +48,13 @@
         {{ key }}
       </li>
     </ul>
+    <div class="fix-title" v-show="fixTitle !== ''" ref="fixTitle">
+      {{ fixTitle }}
+    </div>
+    <!-- 切换到歌单详情页动画效果 -->
+    <transition>
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -52,6 +65,15 @@ export default {
   name: "Singer",
   components: {
     ScrollView,
+  },
+  computed: {
+    fixTitle() {
+      if (this.scrollY >= 0) {
+        return "";
+      } else {
+        return this.keys[this.currentIndex];
+      }
+    },
   },
   created() {
     // 在生命周期发送ajax请求拿到热门歌手
@@ -65,6 +87,42 @@ export default {
         console.log(err);
       });
   },
+  mounted() {
+    this.$refs.scrollView.scrolling((y) => {
+      this.scrollY = y;
+      // 处理第一个区域
+      if (y >= 0) {
+        this.currentIndex = 0;
+        return;
+      }
+      // 处理中间区域
+      for (let i = 0; i < this.groupsTop.length - 1; i++) {
+        let preTop = this.groupsTop[i];
+        let nextTop = this.groupsTop[i + 1];
+        if (-y >= preTop && -y <= nextTop) {
+          this.currentIndex = i;
+
+          // 1.用下一组标题的偏移位 + 当前滚动出去的偏移位
+          let diffOffsetY = nextTop + y;
+          let fixTitleOffsetY = 0;
+          // 2.判断计算的结果是否是0 ~ 分组标题高度的值
+          if (diffOffsetY >= 0 && diffOffsetY <= this.fixTitleHeight) {
+            fixTitleOffsetY = diffOffsetY - this.fixTitleHeight;
+          } else {
+            fixTitleOffsetY = 0;
+          }
+          if (fixTitleOffsetY === this.fixTitleOffsetY) {
+            return;
+          }
+          this.fixTitleOffsetY = fixTitleOffsetY;
+          this.$refs.fixTitle.style.transfrom = `translateY(${fixTitleOffsetY}px)`;
+          return;
+        }
+      }
+      // 处理最后一个区域
+      this.currentIndex = this.groupsTop.length - 1;
+    });
+  },
   data() {
     return {
       keys: [],
@@ -73,6 +131,7 @@ export default {
       currentIndex: 0,
       beginOffsetY: 0,
       moveOffsetY: 0,
+      scrollY: 0, // 当前滚动偏移位
     };
   },
   methods: {
@@ -104,6 +163,9 @@ export default {
       }
       this.keyDown(index);
     },
+    switchSinger(id) {
+      this.$router.push(`/singer/detail/${id}/singer`);
+    },
   },
   watch: {
     list() {
@@ -120,6 +182,11 @@ export default {
           this.groupsTop.push(group.offsetTop);
         });
         console.log(this.groupsTop);
+      });
+    },
+    fixTitle() {
+      this.$nextTick(() => {
+        this.fixTitleHeight = this.$refs.fixTitle.offsetHeight;
       });
     },
   },
@@ -184,5 +251,36 @@ export default {
       }
     }
   }
+  .fix-title {
+    height: 60px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    @include font_size($font_medium);
+    color: #fff;
+    @include bg_color();
+  }
+}
+.v-enter {
+  transform: translateX(100%);
+}
+.v-enter-to {
+  transform: translateX(0%);
+}
+.v-enter-active {
+  transition: transform 1s;
+}
+.v-leave {
+  transform: translateX(0%);
+}
+.v-leave-to {
+  transform: translateX(100%);
+}
+.v-leave-active {
+  transition: transform 1s;
 }
 </style>
