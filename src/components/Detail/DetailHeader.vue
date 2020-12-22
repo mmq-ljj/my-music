@@ -1,13 +1,17 @@
 <template>
-  <div class="header" @click="changeTheme">
-    <div class="header-left" @click.stop="back"></div>
-    <p class="header-title">{{ title }}</p>
-    <div class="header-right"></div>
-  </div>
+  <Header class="header">
+    <div slot="left" class="header-left" @click.stop="back"></div>
+    <p slot="center" class="header-title">{{ title }}</p>
+    <div slot="right" class="header-right"></div>
+  </Header>
 </template>
 <script>
+import Header from "../Header";
 export default {
   name: "DetailHeader",
+  components: {
+    Header,
+  },
   props: {
     title: {
       type: String,
@@ -15,24 +19,7 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      themes: ["theme", "theme1", "theme2"],
-      index: 0,
-    };
-  },
   methods: {
-    // 点击头部切换主题(背景颜色)
-    changeTheme() {
-      this.index++;
-      if (this.index >= this.themes.length) {
-        this.index = 0;
-      }
-      document.documentElement.setAttribute(
-        "data-theme",
-        this.themes[this.index]
-      );
-    },
     back() {
       window.history.back();
     },
@@ -43,20 +30,6 @@ export default {
 @import "../../assets/css/variable";
 @import "../../assets/css/mixin";
 .header {
-  position: relative;
-  z-index: 999;
-  width: 100%;
-  height: 100px;
-  //   background-color: red;
-  @include bg_color();
-  display: flex;
-  justify-content: space-between;
-  .header-left,
-  .header-right {
-    width: 84px;
-    height: 84px;
-    margin-top: 8px;
-  }
   .header-left {
     @include bg_img("../../assets/images/back");
   }

@@ -1,8 +1,14 @@
 <template>
-  <div class="header" @click="changeTheme">
+  <!-- <div class="header" @click="changeTheme">
     <div class="header-left"></div>
     <p class="header-title">喵喵音乐</p>
     <div class="header-right" @click.stop="accountClick"></div>
+  </div> -->
+  <div class="header" @click="changeTheme">
+    <!-- 注意点：不能直接给插槽设置样式(class) -->
+    <div class="left"><slot name="left">左边</slot></div>
+    <slot name="center">中间</slot>
+    <div class="right"><slot name="right">右边</slot></div>
   </div>
 </template>
 <script>
@@ -26,10 +32,6 @@ export default {
         this.themes[this.index]
       );
     },
-    // 点开展开个人中心的方法
-    accountClick() {
-      this.$router.push("/account");
-    },
   },
 };
 </script>
@@ -37,31 +39,20 @@ export default {
 @import "../assets/css/variable";
 @import "../assets/css/mixin";
 .header {
-  // position: relative;
-  // z-index: 999;
   width: 100%;
   height: 100px;
-  //   background-color: red;
   @include bg_color();
   display: flex;
   justify-content: space-between;
-  .header-left,
-  .header-right {
+  .left,
+  .right {
     width: 84px;
     height: 84px;
     margin-top: 8px;
-  }
-  .header-left {
-    @include bg_img("../assets/images/logo");
-  }
-  .header-right {
-    @include bg_img("../assets/images/account");
-  }
-  .header-title {
-    line-height: 100px;
-    color: #fff;
-    font-weight: bold;
-    @include font_size($font_medium);
+    * {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 </style>
