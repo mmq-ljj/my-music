@@ -6,6 +6,7 @@
         <ul>
           <!-- 第一层li for循环出榜单标题 -->
           <li v-for="(value, key) in category.titles" :key="key">
+            <!-- 分组标题 -->
             <h3 class="group-title">{{ value }}</h3>
             <!-- 第一组排行榜 -->
             <ul class="normal-group" v-if="value === '官方榜'">
@@ -59,8 +60,11 @@
 <script>
 import ScrollView from "../components/ScrollView";
 import { getTopListDetail } from "../api/index";
+import MetaInfo from "../../vue-meta-info";
+
 export default {
   name: "Rank",
+  metaInfo: MetaInfo.rank,
   components: {
     ScrollView,
   },

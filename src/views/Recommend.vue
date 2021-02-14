@@ -40,8 +40,11 @@ import Banner from "../components/Recommend/Banner";
 import Personalized from "../components/Recommend/Personalized";
 import SongList from "../components/Recommend/SongList";
 import ScrollView from "../components/ScrollView";
+import MetaInfo from "../../vue-meta-info";
+
 export default {
   name: "Recommend",
+  metaInfo: MetaInfo.recommend,
   // 注册组件
   components: {
     Banner,

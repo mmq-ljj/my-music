@@ -31,9 +31,11 @@ axios.interceptors.response.use(function (response) {
     Vue.hiddenLoading()
     return Promise.reject(error)
 })
+
 // 封装自己的get/post方法
 export default {
-    get: function (path = '', data = {}) {
+    // get请求
+    get(path = '', data = {}) {
         return new Promise(function (resolve, reject) {
             axios.get(path, {
                 params: data
@@ -46,7 +48,8 @@ export default {
                 })
         })
     },
-    post: function (path = '', data = {}) {
+    // post请求
+    post(path = '', data = {}) {
         return new Promise(function (resolve, reject) {
             axios.post(path, data)
                 .then(function (response) {
@@ -57,7 +60,8 @@ export default {
                 })
         })
     },
-    all: function (list) {
+    // all请求
+    all(list) {
         return new Promise(function (resolve, reject) {
             axios.all(list)
                 .then(axios.spread(function (...result) {

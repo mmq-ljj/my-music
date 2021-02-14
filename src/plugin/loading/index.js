@@ -4,7 +4,7 @@ import Loading from './Loading'
 export default {
   // 注意点: 如果要将一个组件封装成一个插件, 那么必须提供一个install方法
   //         那么必须在install方法中注册当前的这个组件
-  install: function (Vue, Options) {
+  install(Vue, Options) {
     // Vue.component(Loading.name, Loading)
 
     // 1.根据我们的组件生成一个构造函数

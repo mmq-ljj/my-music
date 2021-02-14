@@ -5,14 +5,14 @@ import mutations from './mutations'
 import actions from './actions'
 import getters from './getters'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   // 在实际开发过程中会把 state mutations actions 这些单独放在一个文件里 导入进来
-  state: state,
-  mutations: mutations,
-  actions: actions,
-  getters: getters
+  state: state,            // 用于保存全局共享数据
+  mutations: mutations,    // 用于修改全局共享数据的方法
+  actions: actions,        // 用于触发mutations里(修改全局共享数据的方法)
+  getters: getters         // 获取全局共享的数据
 
   // state: 用于保存全局共享的数据
   /*  state: {
@@ -26,7 +26,7 @@ export default new Vuex.Store({
        state.isFullScreen = flag
      }
    },
-   //  actions: 用于保存触发 mutations 中(修改全局共享数据)的方法 的方法
+   //  actions: 用于保存触发 mutations 中( 修改全局共享数据 )的方法 的方法
  
    // 以后只需要调用 actions 的  setFullScreen 方法 这个方法就会 自动触发 mutations 里的 changeFullScreen方法
    // 在changeFullScreen方法 中 就会修改 保存全局共享的数据

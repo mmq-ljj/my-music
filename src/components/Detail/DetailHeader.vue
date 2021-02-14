@@ -30,6 +30,8 @@ export default {
 @import "../../assets/css/variable";
 @import "../../assets/css/mixin";
 .header {
+  position: relative;
+  z-index: 2;
   .header-left {
     @include bg_img("../../assets/images/back");
   }

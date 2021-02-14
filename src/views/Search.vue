@@ -74,8 +74,11 @@
 import ScrollView from "../components/ScrollView";
 import { setLocalStorage, getLocalStorage } from "../tools/tools";
 import { mapActions } from "vuex";
+import MetaInfo from "../../vue-meta-info";
+
 // import { getSearchList,getSearchHot } from "../api/index";
 export default {
+  metaInfo: MetaInfo.search,
   components: {
     ScrollView,
   },
@@ -135,35 +138,40 @@ export default {
     },
     // 获取搜索内容的ajax请求
     async getSearchList() {
-      const { data: res } = await this.$http.get(
-        `search?keywords=${this.keyWords}`
-      );
-      console.log(res);
+      // const { data: res } = await this.$http.get( `search?keywords=${this.keyWords}` );
+      const { data: res } = await this.$http.get(`search`, {
+        params: {
+          keywords: this.keyWords,
+        },
+      });
+      // console.log(res);
       this.songs = res.result.songs;
     },
     // 获取热搜列表内容
     async getSearchHot() {
       const { data: res } = await this.$http.get(`/search/hot`);
-      console.log(res);
+      // console.log(res);
       this.hots = res.result.hots;
-      console.log(this.hots);
+      // console.log(this.hots);
     },
   },
   // 在vue中通过自定义指令实现函数节流节流
   directives: {
     throttle: {
       // 指令的定义
-      inserted: function (el, obj) {
+      inserted(el, obj) {
+        // 清空定时器
         let timerId = null;
         let flag = true;
+        // 给绑定的元素添加一个input事件
         el.addEventListener("input", function () {
           if (!flag) return;
           flag = false;
           timerId && clearTimeout(timerId);
-          timerId = setTimeout(function () {
+          timerId = setTimeout(() => {
             flag = true;
             obj.value();
-          }, 1000);
+          }, 1500);
         });
       },
     },
