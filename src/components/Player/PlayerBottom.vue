@@ -212,7 +212,7 @@ export default {
   .bottom-controll {
     width: 80%;
     margin: 0 auto;
-    padding: 50px 100px;
+    padding: 50px 0px;
     display: flex;
     justify-content: space-between;
     align-items: center;

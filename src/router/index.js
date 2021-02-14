@@ -67,8 +67,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  // 如果需要使用预渲染的插件，那么Router的模式必须是history模式
-  mode: 'history', //刷新网页会出现404
+  // 如果需要使用预渲染的插件，那么Router的模式必须是history模式,否则打包会失败
+  mode: 'history', // 刷新网页会出现404
   // mode: 'hash',
   base: process.env.BASE_URL,
   routes

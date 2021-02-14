@@ -5,7 +5,8 @@
     <!-- 导航栏组件 -->
     <Tabbar></Tabbar>
     <!-- keep-alive 缓存数据不常发生变化的组件 -->
-    <keep-alive include="Singer,Search">
+    <!-- <keep-alive include="Singer,Search"> -->
+    <keep-alive>
       <!-- 路由占位符 导航栏对应的内容 -->
       <router-view></router-view>
     </keep-alive>

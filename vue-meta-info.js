@@ -1,6 +1,6 @@
 export default {
     recommend: {
-      title: '推荐',
+      title: '喵喵音乐 - 推荐',
       meta: [
         {
           name: 'keyWords',
@@ -13,7 +13,7 @@ export default {
       ]
     },
     singer: {
-      title: '我是歌手',
+      title: '喵喵音乐 - 歌手',
       meta: [
         {
           name: 'keyWords',
@@ -26,7 +26,7 @@ export default {
       ]
     },
     rank: {
-      title: '排行版',
+      title: '喵喵音乐 - 排行榜',
       meta: [
         {
           name: 'keyWords',
@@ -39,7 +39,7 @@ export default {
       ]
     },
     search: {
-      title: '搜索',
+      title: '喵喵音乐 - 搜索',
       meta: [
         {
           name: 'keyWords',
@@ -52,7 +52,7 @@ export default {
       ]
     },
     account: {
-      title: '个人中心',
+      title: '喵喵音乐 - 个人中心',
       meta: [
         {
           name: 'keyWords',
@@ -65,7 +65,7 @@ export default {
       ]
     },
     detail: {
-      title: '歌单详情',
+      title: '喵喵音乐 - 歌单详情',
       meta: [
         {
           name: 'keyWords',

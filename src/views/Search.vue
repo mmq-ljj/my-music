@@ -163,7 +163,7 @@ export default {
         // 清空定时器
         let timerId = null;
         let flag = true;
-        // 给绑定的元素添加一个input事件
+        // 给绑定的元素添加一个
         el.addEventListener("input", function () {
           if (!flag) return;
           flag = false;
